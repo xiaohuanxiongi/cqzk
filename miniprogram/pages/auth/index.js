@@ -1,5 +1,5 @@
 const { hex_md5 } = require('../../assets/lib/md5');
-
+import { postNotificationName } from '../../util/wxNotification';
 Page({
   data: {
     array: [],
@@ -14,7 +14,7 @@ Page({
       success (res) {
         if(res['5VOjftjf0dTEx-UEvbMh-1pZhZQ_6KSBXB0HirJwjqY'] === 'accept') {
           wx.cloud.callFunction({
-            name: 'addUser',
+            name: 'cqzk',
             data: { type: 'subscribe' }
           })
           wx.showToast({
@@ -36,11 +36,12 @@ Page({
         const codeId = this.data.array[this.data.index]['code'];
         const params = { type: 'add', zjhm, mm, code: codeId };
         wx.cloud.callFunction({
-          name: 'addUser',
+          name: 'cqzk',
           data: params
         }).then(resp => {
           const res = resp.result;
           wx.showToast({ title: res.msg, icon: 'none' });
+          postNotificationName('isAuth', true);
         }).catch(err => {
           wx.showToast({ title: `请求超时` });
         })
@@ -53,7 +54,7 @@ Page({
   },
   getList() {
     wx.cloud.callFunction({
-      name: 'addUser',
+      name: 'cqzk',
       data: { type: 'title' }
     }).then(res => {
       this.setData({

@@ -23,6 +23,7 @@ button::after{
 
 
 page {
+  background-color: #3498db;
   /*background-image: radial-gradient(circle, #89f7fe, #66a6ff);*/
   display: flex;
   flex-direction: column;

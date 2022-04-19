@@ -10,8 +10,6 @@ const zkInfoUrl = 'http://zk.cqksy.cn/zkksquery/kj/getKsInfo'
 const titleUrl = 'http://zk.cqksy.cn/zkksquery/getTkList';
 //  获取成绩
 const scoreUrl = 'http://zk.cqksy.cn/zkksquery/kj/getTkCj';
-//  获取所在专业
-const ksInfo = 'http://zk.cqksy.cn/zkksquery/kj/getKsInfoAll';
 //  毕业预判
 const byKc = 'http://zk.cqksy.cn/zkksby/getByKc'
 
@@ -22,6 +20,5 @@ module.exports = {
   zkInfoUrl,
   titleUrl,
   scoreUrl,
-  ksInfo,
   byKc
 }

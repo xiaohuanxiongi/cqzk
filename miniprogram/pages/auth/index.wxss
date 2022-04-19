@@ -1,1 +1,18 @@
-/* pages/auth/index.wxss */
+.form {
+  padding: 30rpx;
+}
+.form__item {
+  padding: 30rpx 0;
+}
+.form__item .weui-input {
+  padding: 20rpx;
+}
+.form__button {
+  margin-top: 60rpx;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-gap: 30rpx;
+}
+.form__button button {
+  width: 100%;
+}

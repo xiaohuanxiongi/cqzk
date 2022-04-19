@@ -1,16 +1,6 @@
 const axios = require('./axios');
-const {
-  zkUrl,
-  base64Img,
-  zkLoginUrl,
-  zkInfoUrl,
-  titleUrl,
-  scoreUrl,
-  ksInfo,
-  byKc
-} = require('./api');
+const { zkUrl, base64Img, zkLoginUrl, zkInfoUrl, titleUrl, scoreUrl } = require('./api');
 const qs = require('qs');
-const _ = Math.random();
 
 //  自考获取验证码
 function zkCodeService(params) {
@@ -29,7 +19,7 @@ function zkLoginService(data, cookie) {
 
 //  获取用户信息/验证token
 function zkTokenCheckService(cookie) {
-  return axios.get(zkInfoUrl, { params: { _ }, headers: { Cookie: cookie } })
+  return axios.get(zkInfoUrl, { headers: { Cookie: cookie } })
 }
 
 //  获取考试目录信息
@@ -42,22 +32,10 @@ function zkScoreService(params, cookie) {
   return axios.get(`${scoreUrl}/${params.id}`, { params, headers: { Cookie: cookie } })
 }
 
-//  获取所在专业
-function ksInfoService(cookie) {
-  return axios.get(ksInfo, { params: { _ }, headers: { Cookie: cookie } })
-}
-
-//  毕业预判
-function byKcService(data, cookie) {
-  return axios.post(byKc, qs.stringify(data), { params: { _ }, headers: { Cookie: cookie } })
-}
-
 module.exports = {
   zkCodeService,
   base64ImgService,
   zkLoginService,
   zkTokenCheckService,
-  zkScoreService,
-  ksInfoService,
-  byKcService
+  zkScoreService
 }

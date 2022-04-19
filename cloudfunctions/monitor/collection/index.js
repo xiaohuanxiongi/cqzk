@@ -31,11 +31,6 @@ async function read(name, params) {
   }
 }
 
-//  查单个
-async function readOne(name, id) {
-  return await db.collection(name).doc(id).get();
-}
-
 //  改
 async function edit(name, id, params) {
   return await db.collection(name).doc(id).set({ data: params });
@@ -47,7 +42,5 @@ async function editOne(name, id, params) {
 }
 module.exports = {
   read,
-  readOne,
-  edit,
   editOne
 }

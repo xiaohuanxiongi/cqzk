@@ -5,6 +5,16 @@
 </view>
 <scroll-view class="container" scroll-y style="padding-top: {{ barHeight }}px">
   <view class="warp">
-    <text>功能开发中....</text>
+    <block wx:if="{{ auth }}">
+      <block wx:for="{{ list }}" wx:key="index">
+        <view class="cell {{ item.zt === '0' ? 'fail' : 'success' }}">
+          <text>{{ item.kcmc }}</text>
+          <text>{{ item.cjly }}</text>
+        </view>
+      </block>
+    </block>
+    <block wx:else>
+      <text>你没还有授权..</text>
+    </block>
   </view>
 </scroll-view>

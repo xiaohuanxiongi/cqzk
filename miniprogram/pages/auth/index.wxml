@@ -1,8 +1,14 @@
-<view>
+<view class="form">
   <form catchsubmit="formSubmit">
-    <input name="zjhm" class="weui-input" type="idcard" placeholder="身份证输入键盘" />
-    <input name="mm" class="weui-input" type="password" placeholder="请输入密码" />
-    <button type="primary" formType="submit">保存</button>
-    <button type="primary" bindtap="clickInfo">订阅通知</button>
+    <div class="form__item">
+      <input name="zjhm" class="weui-input" type="idcard" placeholder="身份证号" />
+    </div>
+    <div class="form__item">
+      <input name="mm" class="weui-input" type="password" placeholder="请输入密码" />
+    </div>
+    <div class="form__button">
+      <button type="primary" formType="submit">保存</button>
+      <button type="primary" bindtap="clickInfo">订阅通知</button>
+    </div>
   </form>
 </view>
