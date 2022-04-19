@@ -1,0 +1,8 @@
+<view>
+  <form catchsubmit="formSubmit">
+    <input name="zjhm" class="weui-input" type="idcard" placeholder="身份证输入键盘" />
+    <input name="mm" class="weui-input" type="password" placeholder="请输入密码" />
+    <button type="primary" formType="submit">保存</button>
+    <button type="primary" bindtap="clickInfo">订阅通知</button>
+  </form>
+</view>

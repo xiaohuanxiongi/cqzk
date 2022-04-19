@@ -1,0 +1,30 @@
+/**app.wxss**/
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 48px);
+}
+
+button {
+  background: initial;
+}
+
+button:focus{
+  outline: 0;
+}
+
+button::after{
+  border: none;
+}
+
+
+page {
+  /*background-image: radial-gradient(circle, #89f7fe, #66a6ff);*/
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
