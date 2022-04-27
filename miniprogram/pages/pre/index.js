@@ -1,4 +1,4 @@
-import { addNotification } from '../../util/wxNotification';
+import { addNotification } from '../../utils/wxNotification';
 Component({
   data: {
     statusBarHeight: 0,
@@ -10,12 +10,13 @@ Component({
   lifetimes: {
     ready() {
       const that = this;
-
+      this.getList();
+      addNotification('isAuth', that.getList, that);
     },
   },
   pageLifetimes: {
     show() {
-      let that = this;
+      const that = this;
       const { top, height } = wx.getMenuButtonBoundingClientRect();
       const { statusBarHeight } = wx.getSystemInfoSync();
       const navHead = height + (top - statusBarHeight) * 2;
@@ -31,8 +32,6 @@ Component({
           selected: 1
         })
       }
-      this.getList();
-      addNotification('isAuth', that.getList, that);
     }
   },
   methods: {

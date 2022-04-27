@@ -1,6 +1,6 @@
 {
-  "navigationStyle": "custom",
-  "navigationBarTextStyle": "white",
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "毕业预判",
   "usingComponents": {},
   "disableScroll": true
 }

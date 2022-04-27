@@ -45,9 +45,16 @@ async function edit(name, id, params) {
 async function editOne(name, id, params) {
   return await db.collection(name).doc(id).update({ data: params });
 }
+
+//  改多个
+async function editMore(name, query, params) {
+  return await db.collection(name).where(query).update({ data: params })
+}
+
 module.exports = {
   read,
   readOne,
   edit,
-  editOne
+  editOne,
+  editMore
 }

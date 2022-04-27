@@ -3,7 +3,9 @@
     "pages/index/index",
     "pages/my/index",
     "pages/auth/index",
-    "pages/pre/index"
+    "pages/pre/index",
+    "pages/score/index",
+    "pages/set/index"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -29,8 +31,7 @@
       }
     ]
   },
-  "useExtendedLib": {
-  },
+  "useExtendedLib": {},
   "sitemapLocation": "sitemap.json",
   "style": "v2"
 }

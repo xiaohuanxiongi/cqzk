@@ -38,8 +38,8 @@ function zkTitleService(params) {
 }
 
 //  获取成绩
-function zkScoreService(params, cookie) {
-  return axios.get(`${scoreUrl}/${params.id}`, { params, headers: { Cookie: cookie } })
+function zkScoreService({ id, ...params }, cookie) {
+  return axios.get(`${scoreUrl}/${id}`, { params, headers: { Cookie: cookie } })
 }
 
 //  获取所在专业

@@ -22,5 +22,21 @@
   padding: 20px 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-gap: 40rpx;
   text-align: center;
+}
+.warp .item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.warp .item image {
+  width: 80rpx;
+  height: 80rpx;
+  display: block;
+  margin-bottom: 10rpx;
+}
+.warp .item text {
+  font-size: 26rpx;
 }

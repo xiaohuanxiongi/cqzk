@@ -1,15 +1,30 @@
-<view class="head" style="height: {{ barHeight }}px">
-  <view class="head__title" style="height: {{ navHead }}px;padding-top: {{ statusBarHeight }}px">
-    <view class="avatar">
-      <open-data type="userAvatarUrl"></open-data>
-    </view>
-    <open-data type="userNickName"></open-data>
-  </view>
-</view>
-<scroll-view class="container" scroll-y style="padding-top: {{ barHeight }}px">
+<!--<view class="head" style="height: {{ barHeight }}px">-->
+<!--  <view class="head__title" style="height: {{ navHead }}px;padding-top: {{ statusBarHeight }}px">-->
+<!--    <view class="avatar">-->
+<!--      <open-data type="userAvatarUrl"></open-data>-->
+<!--    </view>-->
+<!--    <open-data type="userNickName"></open-data>-->
+<!--  </view>-->
+<!--</view>-->
+<scroll-view class="container" scroll-y>
   <view class="warp">
-    <text bindtap="jump" data-key="login">授权登录</text>
-    <text bindtap="jump" data-key="years">历年成绩查询</text>
-    <text bindtap="jump" data-key="seat">座位号查询</text>
+    <view class="item" bindtap="jump" data-key="login">
+      <image src="../../assets/img/icon-1.png"></image>
+      <text>授权登录</text>
+    </view>
+    <view class="item" bindtap="jump" data-key="years">
+      <image src="../../assets/img/icon-2.png"></image>
+      <text>历年成绩查询</text>
+    </view>
+    <view class="item" bindtap="jump" data-key="seat">
+      <image src="../../assets/img/icon-2.png"></image>
+      <text>座位号查询</text>
+    </view>
+    <block wx:if="{{ openId === 'oMwqQ4sg5CxHrJV6NS743ew9Olrg' }}">
+      <view class="item" bindtap="jump" data-key="set">
+        <image src="../../assets/img/icon-4.png"></image>
+        <text>设置查询信息</text>
+      </view>
+    </block>
   </view>
 </scroll-view>

@@ -2,10 +2,11 @@ const {
   zkCodeService,
   base64ImgService,
   zkLoginService,
-  ksInfoService,
-  byKcService
+  zkTokenCheckService,
+  zkScoreService
 } = require('../service');
 const { readOne, editOne } = require('../collection/index');
+
 
 //  base64转码
 function btoa(string) {
@@ -55,6 +56,7 @@ async function check({ zjhm, mm, openId }) {
       }
     } catch (err) {
       if(err === "验证码错误") {
+        console.log(err, `重新执行?`)
         return check({ zjhm, mm, openId });
       } else {
         reject(err);
@@ -63,42 +65,43 @@ async function check({ zjhm, mm, openId }) {
   })
 }
 
-function getByKc(user) {
-  const cookie = user.token;
-  return new Promise(resolve => {
-    ksInfoService(cookie).then((info) => {
-      const _ = Math.random();
-      const id = info.zcList[0]['kkzyid'];
-      byKcService({ kkzyid: id }, cookie).then((res) => {
-        console.log(res);
-        resolve({ code: 200, data: res.zyKcList });
-      })
+//  验证token
+function getInfo(user, code) {
+  const { token } = user;
+  return new Promise((resolve, reject) => {
+    zkTokenCheckService(token).then((info) => {
+      let _ = Math.random();
+      zkScoreService({ id: code, _ }, token).then(res => {
+        //  去把剩余的用户都执行一次
+        resolve(res);
+      }).catch((err) => {
+        reject(err.data);
+      });
     }).catch((err) => {
-      console.log(err)
       if(err.status === 203) {
         check(user).then((token) => {
           user.token = token;
-          resolve(getByKc(user));
+          return getInfo(user, code);
         }).catch(err => {
-          console.log(`报错信息:`, err);
-          resolve({ code: 400, msg: err });
+          reject(err);
         })
       } else {
-        resolve({ code: 202, msg: `用户信息获取失败` });
+        reject('用户信息获取失败');
       }
     })
   })
 }
 
 exports.main = async (event) => {
-  const { openId } = event;
-  try {
-    const info = await readOne('user', openId);
-    const data = await getByKc(info.data);
-    console.log(`返回成功:`, data);
-    return data;
-  } catch (err) {
-    console.log(`返回失败:`, err)
-    return { code: 400, msg: '你还未授权' };
-  }
+  const { openId, code } = event;
+  return new Promise(async (resolve) => {
+    const user = await readOne('user', openId);
+    getInfo(user.data, code).then(res => {
+      console.log(res);
+      resolve({ code: 200, data: res, msg: '成功' });
+    }).catch(err => {
+      console.log(err);
+      resolve({ code: 400, msg: err });
+    });
+  })
 }

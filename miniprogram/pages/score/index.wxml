@@ -1,0 +1,28 @@
+<view class="form">
+  <form catchsubmit="getInfo">
+    <div class="form__item">
+      <view class="section__title">选择一场考试查询</view>
+      <picker bindchange="bindPickerChange" range-key="name"  value="{{index}}" range="{{list}}">
+        <view class="picker">
+          当前选择：{{list[index]['name']}}
+        </view>
+      </picker>
+    </div>
+    <div class="form__button">
+      <button type="primary" formType="submit">查询</button>
+    </div>
+  </form>
+  <view class="row">
+    <block wx:if="{{ isShow }}">
+      <block wx:for="{{ info }}" wx:key="index">
+        <view class="cell">
+          <text>{{ item.kcmc }}</text>
+          <text>{{ item.cj }}</text>
+        </view>
+      </block>
+    </block>
+    <block wx:else>
+      <text>{{ msg }}</text>
+    </block>
+  </view>
+</view>

@@ -1,11 +1,24 @@
 const { hex_md5 } = require('../../assets/lib/md5');
-import { postNotificationName } from '../../util/wxNotification';
+import { postNotificationName } from '../../utils/wxNotification';
 Page({
   data: {
     array: [],
     index: 1
   },
   onLoad() {
+    wx.showModal({
+      title: '提示',
+      content: '输入的账号密码将进行加密,用于自动登录后查询成绩.',
+      confirmText: '确认使用',
+      cancelText: '不使用',
+      success (res) {
+        if (res.confirm) {
+          console.log('用户点击确定')
+        } else if (res.cancel) {
+          wx.navigateBack({ delta: 1 })
+        }
+      }
+    })
     this.getList();
   },
   clickInfo() {
@@ -33,8 +46,8 @@ Page({
     if (zjhm && mm) {
       try {
         mm = hex_md5(mm)
-        const codeId = this.data.array[this.data.index]['code'];
-        const params = { type: 'add', zjhm, mm, code: codeId };
+        // const codeId = this.data.array[this.data.index]['code'];
+        const params = { type: 'add', zjhm, mm };
         wx.cloud.callFunction({
           name: 'cqzk',
           data: params
@@ -63,7 +76,7 @@ Page({
     })
   },
   bindPickerChange(e) {
-    console.log('picker发送选择改变，携带值为', e)
+    // console.log('picker发送选择改变，携带值为', e)
     this.setData({
       index: e.detail.value
     })
