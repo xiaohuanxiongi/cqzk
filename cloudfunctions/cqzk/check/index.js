@@ -25,7 +25,7 @@ function btoa(string) {
   return rest ? result.slice(0, rest - 3) + "===".substring(rest) : result;
 };
 
-async function check({ zjhm, mm, openId, codeId }) {
+async function check({ zjhm, mm, openId }) {
   return new Promise(async resolve => {
     try {
       const flow = await zkCodeService({ _: Math.random() });
@@ -35,7 +35,7 @@ async function check({ zjhm, mm, openId, codeId }) {
       const params = { zjhm, mm, vrifyCode: code.data};
       const isLogin = await zkLoginService(params, cookie);
       if (!isLogin) {
-        const item = { zjhm, mm, openId, token: cookie, code: codeId };
+        const item = { zjhm, mm, openId, token: cookie };
         //  使用doc才查询,当这个用户存在时更新,不存在则新增;
         await edit('user', openId, item);
         resolve({ code: 200, msg: '登录成功' });
@@ -44,7 +44,7 @@ async function check({ zjhm, mm, openId, codeId }) {
       }
     } catch (err) {
       if(err === "验证码错误") {
-        return check({ zjhm, mm, openId, codeId });
+        return check({ zjhm, mm, openId });
       } else {
         resolve({ code: 400, msg: err });
       }

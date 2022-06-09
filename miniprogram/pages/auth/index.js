@@ -6,19 +6,6 @@ Page({
     index: 1
   },
   onLoad() {
-    wx.showModal({
-      title: '提示',
-      content: '输入的账号密码将进行加密,用于自动登录后查询成绩.',
-      confirmText: '确认使用',
-      cancelText: '不使用',
-      success (res) {
-        if (res.confirm) {
-          console.log('用户点击确定')
-        } else if (res.cancel) {
-          wx.navigateBack({ delta: 1 })
-        }
-      }
-    })
     this.getList();
   },
   clickInfo() {

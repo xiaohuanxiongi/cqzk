@@ -1,17 +1,42 @@
-.form {
-  &__item {
-    padding: 30rpx 0;
-    .picker {
-      padding: 20rpx;
+.loading {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #67ceff;
+  image {
+    width: 100%;
+    display: block;
+  }
+}
+.container {
+  .form {
+    width: 100vw;
+    padding: 30rpx;
+    box-sizing: border-box;
+    &__item {
+      font-size: 26rpx;
+      display: flex;
+      justify-content: center;
+    }
+    &__button {
+      margin-top: 60rpx;
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      grid-gap: 30rpx;
+      button {
+        width: 100%;
+        font-size: 26rpx;
+      }
     }
   }
-  &__button {
-    margin-top: 60rpx;
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    grid-gap: 30rpx;
-    button {
-      width: 100%;
-    }
+  .tip {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 26rpx;
   }
 }

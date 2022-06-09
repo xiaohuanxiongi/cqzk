@@ -1,18 +1,28 @@
 .form {
-  padding: 30rpx;
+  //padding: 30rpx;
   &__item {
-    padding: 30rpx 0;
+    padding: 0 30rpx;
+    display: flex;
+    align-items: center;
+    font-size: 26rpx;
+    border-bottom: 1px solid #f2f2f2;
+    .label {
+      width: 180rpx;
+    }
     .weui-input {
-      padding: 20rpx;
+      flex: 1;
+      padding: 30rpx 0;
+      //padding: 20rpx;
+    }
+    &:last-child {
+      border-bottom: none;
     }
   }
   &__button {
-    margin-top: 60rpx;
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    grid-gap: 30rpx;
-    button {
-      width: 100%;
+    padding: 0 30rpx;
+    .btn {
+      width: calc(100% - 60rpx);
+      font-size: 26rpx;
     }
   }
 }

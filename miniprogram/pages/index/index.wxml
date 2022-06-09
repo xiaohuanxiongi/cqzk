@@ -1,9 +1,16 @@
-<view class="head" style="height: {{ barHeight }}px">
-  <view class="head__title" style="height: {{ navHead }}px;padding-top: {{ statusBarHeight }}px">
-    <text>重庆自考小助手</text>
+<view class="page">
+  <view class="head">
+    <!--重庆自学考试服务平台-->
+  </view>
+  <view class="body">
+    <view class="list">
+      <block wx:for="{{ navList }}" wx:key="index">
+        <navigator url="{{ item.url }}" class="list-item">
+          <image src="{{ item.imgUrl }}"></image>
+          <text class="title">{{ item.name }}</text>
+          <text class="des">{{ item.des }}</text>
+        </navigator>
+      </block>
+    </view>
   </view>
 </view>
-<scroll-view class="container" scroll-y style="padding-top: {{ barHeight }}px">
-  <view class="warp">
-  </view>
-</scroll-view>

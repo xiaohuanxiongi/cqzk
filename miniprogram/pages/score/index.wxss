@@ -1,8 +1,50 @@
-.row {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
+.form {
+  height: 100vh;
 }
-.row .cell {
-  display: grid;
-  grid-template-columns: 80% 20%;
+.form__item {
+  height: 108rpx;
+  padding: 0 30rpx;
+  display: flex;
+  align-items: center;
+  font-size: 26rpx;
+  border-bottom: 1px solid #f2f2f2;
+  background-color: #fff;
+}
+.form__item .picker {
+  display: flex;
+  align-items: center;
+  font-size: 26rpx;
+}
+.form__item .label {
+  width: 180rpx;
+}
+.form__item .weui-input {
+  flex: 1;
+  height: 100%;
+}
+.form__item:last-child {
+  border-bottom: none;
+}
+.form__button {
+  padding: 0 30rpx;
+}
+.form__button .btn {
+  width: calc(100% - 60rpx);
+  font-size: 26rpx;
+}
+.form .row {
+  margin-top: 20rpx;
+}
+.form .row .cell {
+  padding: 0 30rpx;
+  height: 60rpx;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  font-size: 26rpx;
+}
+.form .row .tip {
+  display: block;
+  font-size: 26rpx;
+  text-align: center;
 }

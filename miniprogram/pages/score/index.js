@@ -1,6 +1,11 @@
+import { hex_md5 } from '../../assets/lib/md5';
 import { toast } from '../../utils/util';
+import { cloud } from "../../utils/request";
+
 Page({
   data: {
+    auth: false,
+    loading: true,
     list: [],
     index: 0,
     info: [],
@@ -9,17 +14,25 @@ Page({
   },
   onLoad() {
     this.getList();
+    this.checkUser();
   },
-
+  //  验证账号是否授权过,若未授权则是输入账号密码查询,若授权过则可以直接查询
+  async checkUser() {
+    try {
+      await cloud('cqzk', 'checkAuth');
+      this.setData({ auth: true });
+    } catch (err) {
+      this.setData({ auth: false });
+    }
+  },
   //  获取可查月份
   getList() {
     wx.cloud.callFunction({ name: 'cqzk', data: { type: 'title' } }).then((res) => {
       const list = res.result.data;
-      this.setData({ list })
-      console.log(res)
+      this.setData({ list, loading: false });
     }).catch((err) => {
       toast('失败');
-      console.log(err)
+      this.setData({ loading: false });
     })
   },
   //  修改
@@ -30,27 +43,31 @@ Page({
   },
   //  获取成绩
   getInfo(e) {
-    wx.showLoading({ title: '请稍后..' });
+    wx.showLoading({ title: '查询中..' });
     const codeId = this.data.list[this.data.index]['code'];
-    wx.cloud.callFunction({
-      name: 'cqzk',
-      data: { type: 'cj', code: codeId }
-    }).then((res) => {
-      toast('成功');
-      if (res.result.code === 200) {
-        this.setData({
-          isShow: true,
-          info: res.result.data
+    if (this.data.auth) {
+      cloud('cqzk', 'cj', { code: codeId }).then(res => {
+        wx.hideLoading();
+        this.setData({ isShow: true, info: res });
+      }).catch(err => {
+        wx.hideLoading();
+        this.setData({ isShow: false, msg: err });
+      })
+    } else {
+      let { zjhm, mm } = e.detail.value;
+      if (zjhm && mm) {
+        mm = hex_md5(mm);
+        cloud('cqzk', 'cj', { code: codeId, zjhm, mm }).then(res => {
+          wx.hideLoading();
+          this.setData({ isShow: true, info: res });
+        }).catch(err => {
+          wx.hideLoading();
+          this.setData({ isShow: false, msg: err });
         })
       } else {
-        this.setData({
-          isShow: false,
-          msg: res.result.msg
-        })
+        toast(`请填写完整信息`);
       }
-    }).catch((err) => {
-      toast('失败');
-      console.log(err)
-    })
+      // wx.hideLoading()
+    }
   }
 })

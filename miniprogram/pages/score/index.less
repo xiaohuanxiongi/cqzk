@@ -1,0 +1,53 @@
+.form {
+  height: 100vh;
+  //background-color: #f2f2f2;
+  &__item {
+    height: 108rpx;
+    padding: 0 30rpx;
+    display: flex;
+    align-items: center;
+    font-size: 26rpx;
+    border-bottom: 1px solid #f2f2f2;
+    background-color: #fff;
+    .picker {
+      display: flex;
+      align-items: center;
+      font-size: 26rpx;
+    }
+    .label {
+      width: 180rpx;
+    }
+    .weui-input {
+      flex: 1;
+      height: 100%;
+      //padding: 30rpx 0;
+      //padding: 20rpx;
+    }
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  &__button {
+    padding: 0 30rpx;
+    .btn {
+      width: calc(100% - 60rpx);
+      font-size: 26rpx;
+    }
+  }
+  .row {
+    margin-top: 20rpx;
+    .cell {
+      padding: 0 30rpx;
+      height: 60rpx;
+      background-color: #fff;
+      display: flex;
+      justify-content: space-between;
+      font-size: 26rpx;
+    }
+    .tip {
+      display: block;
+      font-size: 26rpx;
+      text-align: center;
+    }
+  }
+}

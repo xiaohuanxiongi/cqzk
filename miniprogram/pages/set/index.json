@@ -1,3 +1,7 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "cq-loading": "../../components/loading"
+  },
+  "navigationBarTitleText": "订阅查询",
+  "disableScroll": true
 }

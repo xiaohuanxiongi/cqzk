@@ -1,66 +1,37 @@
 import { addNotification } from '../../utils/wxNotification';
-Component({
+import { cloud } from "../../utils/request";
+
+Page({
   data: {
-    statusBarHeight: 0,
-    navHead: 0,
-    barHeight: 0,
+    loading: true,
+    info: {},
     auth: false,
     list: []
   },
-  lifetimes: {
-    ready() {
-      const that = this;
-      this.getList();
-      addNotification('isAuth', that.getList, that);
-    },
+  onLoad() {
+    this.checkAuth();
   },
-  pageLifetimes: {
-    show() {
-      const that = this;
-      const { top, height } = wx.getMenuButtonBoundingClientRect();
-      const { statusBarHeight } = wx.getSystemInfoSync();
-      const navHead = height + (top - statusBarHeight) * 2;
-      const barHeight = navHead + statusBarHeight;
-      that.setData({
-        statusBarHeight,
-        navHead,
-        barHeight
-      })
-      if (typeof this.getTabBar === 'function' &&
-        this.getTabBar()) {
-        this.getTabBar().setData({
-          selected: 1
-        })
-      }
+  async checkAuth() {
+    try {
+      await cloud('cqzk', 'checkAuth');
+      this.setData({ auth: true }, () => {
+        this.getList()
+      });
+    } catch (err) {
+      console.log(err);
+      this.setData({ auth: false, loading: false });
     }
   },
-  methods: {
-    getList(option) {
-      let that;
-      if(option) {
-        that = this.observer;
-      } else {
-        that = this;
-      }
-      wx.cloud.callFunction({
-        name: 'cqzk',
-        data: { type: 'bykc' }
-      }).then((res) => {
-        if(res.result.code === 200) {
-          that.setData({
-            auth: true,
-            list: res.result.data
-          })
-          console.log(that.data)
-        } else {
-          wx.showToast({
-            title: res.result.msg,
-            icon: 'none'
-          })
-        }
-      }).catch((err) => {
-        console.log(err);
+  async getList() {
+    try {
+      const { zyKcList, zy } = await cloud('cqzk', 'bykc');
+      this.setData({ list: zyKcList, info: zy, loading: false })
+    } catch (err) {
+      wx.showToast({
+        title: err.msg,
+        icon: 'none'
       })
     }
   }
 })
+

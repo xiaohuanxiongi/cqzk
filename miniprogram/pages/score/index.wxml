@@ -1,28 +1,43 @@
-<view class="form">
-  <form catchsubmit="getInfo">
-    <div class="form__item">
-      <view class="section__title">选择一场考试查询</view>
-      <picker bindchange="bindPickerChange" range-key="name"  value="{{index}}" range="{{list}}">
-        <view class="picker">
-          当前选择：{{list[index]['name']}}
-        </view>
-      </picker>
-    </div>
-    <div class="form__button">
-      <button type="primary" formType="submit">查询</button>
-    </div>
-  </form>
-  <view class="row">
-    <block wx:if="{{ isShow }}">
-      <block wx:for="{{ info }}" wx:key="index">
-        <view class="cell">
-          <text>{{ item.kcmc }}</text>
-          <text>{{ item.cj }}</text>
-        </view>
+<block wx:if="{{ loading }}">
+  <cq-loading />
+</block>
+<block wx:else>
+  <view class="form">
+    <form catchsubmit="getInfo">
+      <block wx:if="{{ !auth }}">
+        <div class="form__item">
+          <text class="label">准考证号</text>
+          <input name="zjhm" class="weui-input" type="idcard" placeholder="输入准考证号" />
+        </div>
+        <div class="form__item">
+          <text class="label">查询密码</text>
+          <input name="mm" class="weui-input" type="password" placeholder="输入查询密码" />
+        </div>
       </block>
-    </block>
-    <block wx:else>
-      <text>{{ msg }}</text>
-    </block>
+      <div class="form__item">
+        <picker bindchange="bindPickerChange" range-key="name"  value="{{index}}" range="{{list}}">
+          <view class="picker">
+            <text class="label">当前选择</text>
+            <text class="weui-input">{{list[index]['name']}}</text>
+          </view>
+        </picker>
+      </div>
+      <div class="form__button">
+        <button type="primary" formType="submit" class="btn">查询</button>
+      </div>
+    </form>
+    <view class="row">
+      <block wx:if="{{ isShow }}">
+        <block wx:for="{{ info }}" wx:key="index">
+          <view class="cell">
+            <text>{{ item.kcdm }}-{{ item.kcmc }}</text>
+            <text>{{ item.cj }}</text>
+          </view>
+        </block>
+      </block>
+      <block wx:else>
+        <text class="tip">{{ msg }}</text>
+      </block>
+    </view>
   </view>
-</view>
+</block>

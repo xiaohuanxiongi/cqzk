@@ -1,6 +1,8 @@
 {
   "navigationBarTextStyle": "black",
   "navigationBarTitleText": "毕业预判",
-  "usingComponents": {},
+  "usingComponents": {
+    "cq-loading": "../../components/loading"
+  },
   "disableScroll": true
 }

@@ -34,8 +34,8 @@ function btoa(string) {
   return rest ? result.slice(0, rest - 3) + "===".substring(rest) : result;
 }
 
-//  授权
-async function check({ zjhm, mm, openId }) {
+//  获取token
+async function auth({ zjhm, mm, openId }) {
   return new Promise(async (resolve, reject) => {
     try {
       const flow = await zkCodeService({ _: Math.random() });
@@ -45,43 +45,40 @@ async function check({ zjhm, mm, openId }) {
       const params = { zjhm, mm, vrifyCode: code.data};
       const isLogin = await zkLoginService(params, cookie);
       if (!isLogin) {
-        editOne('user', openId, { token: cookie }).then(() => {
-          resolve(cookie);
+        resolve(cookie);
+        readOne('user', openId).then(async () => {
+          await editOne('user', openId, { token: cookie })
         }).catch(() => {
-          //  修改失败
-          reject(`修改失败`);
+          //  不做操作
         })
-      } else {
-        reject(isLogin);
       }
     } catch (err) {
+      console.log(err)
       if(err === "验证码错误") {
-        console.log(err, `重新执行?`)
-        return check({ zjhm, mm, openId });
+        return auth({ zjhm, mm, openId });
       } else {
-        reject(err);
+        reject(err)
       }
     }
   })
 }
-
-//  验证token
-function getInfo(user, code) {
-  const { token } = user;
+//  查询成绩
+function query(user, code) {
+  const { token = '', zjhm, mm, openId } = user;
   return new Promise((resolve, reject) => {
     zkTokenCheckService(token).then((info) => {
-      let _ = Math.random();
-      zkScoreService({ id: code, _ }, token).then(res => {
-        //  去把剩余的用户都执行一次
+      const _ = Math.random();
+      zkScoreService({ id: code, _ }, token).then((res) => {
+        console.log(`调用成功`, res);
         resolve(res);
       }).catch((err) => {
         reject(err.data);
-      });
+      })
     }).catch((err) => {
-      if(err.status === 203) {
-        check(user).then((token) => {
+      if (err.status === 203) {
+        auth({ zjhm, mm, openId }).then((token) => {
           user.token = token;
-          return getInfo(user, code);
+          resolve(query(user, code));
         }).catch(err => {
           reject(err);
         })
@@ -93,15 +90,19 @@ function getInfo(user, code) {
 }
 
 exports.main = async (event) => {
-  const { openId, code } = event;
+  const { openId, code, zjhm, mm } = event;
+  let user = {};
   return new Promise(async (resolve) => {
-    const user = await readOne('user', openId);
-    getInfo(user.data, code).then(res => {
-      console.log(res);
+    if (zjhm && mm) {
+      user = { zjhm, mm, openId }
+    } else {
+      const { data } = await readOne('user', openId);
+      user = data;
+    }
+    query(user, code).then(res => {
       resolve({ code: 200, data: res, msg: '成功' });
     }).catch(err => {
-      console.log(err);
       resolve({ code: 400, msg: err });
-    });
+    })
   })
 }

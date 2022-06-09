@@ -1,21 +1,22 @@
-<view class="form">
-  <form catchsubmit="handleSubmit">
-    <div class="form__item">
-      <picker name="index" bindchange="bindPickerChange" range-key="name"  value="{{index}}" range="{{list}}">
-        <view class="picker">
-          默认哪场考试：{{list[index]['name']}}
+<block wx:if="{{ loading }}">
+  <cq-loading />
+</block>
+<block wx:else>
+  <scroll-view class="container" scroll-y >
+    <block wx:if="{{ auth }}">
+      <form catchsubmit="handleSubmit">
+        <view class="form">
+          <div class="form__item">
+            <text class="label">点击下方按钮,订阅自动查询成绩</text>
+          </div>
+          <div class="form__button">
+            <button type="primary" formType="submit" disabled="{{ isClick }}">{{ screenings.name }}</button>
+          </div>
         </view>
-      </picker>
-    </div>
-    <div class="form__item">
-      <picker name="time" mode="date" value="{{date}}" start="2021-09-01" bindchange="bindDateChange">
-        <view class="picker">
-          查询时间: {{date}}
-        </view>
-      </picker>
-    </div>
-    <div class="form__button">
-      <button type="primary" formType="submit" disabled="{{ !isClick }}">设置</button>
-    </div>
-  </form>
-</view>
+      </form>
+    </block>
+    <block wx:else>
+      <text class="tip">尚未授权,不能使用此功能</text>
+    </block>
+  </scroll-view>
+</block>

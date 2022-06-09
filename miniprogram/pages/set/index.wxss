@@ -1,15 +1,40 @@
-.form__item {
-  padding: 30rpx 0;
+.loading {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #67ceff;
 }
-.form__item .picker {
-  padding: 20rpx;
+.loading image {
+  width: 100%;
+  display: block;
 }
-.form__button {
+.container .form {
+  width: 100vw;
+  padding: 30rpx;
+  box-sizing: border-box;
+}
+.container .form__item {
+  font-size: 26rpx;
+  display: flex;
+  justify-content: center;
+}
+.container .form__button {
   margin-top: 60rpx;
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   grid-gap: 30rpx;
 }
-.form__button button {
+.container .form__button button {
   width: 100%;
+  font-size: 26rpx;
+}
+.container .tip {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 26rpx;
 }

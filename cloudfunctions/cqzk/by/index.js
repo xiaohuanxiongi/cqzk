@@ -70,8 +70,7 @@ function getByKc(user) {
       const _ = Math.random();
       const id = info.zcList[0]['kkzyid'];
       byKcService({ kkzyid: id }, cookie).then((res) => {
-        console.log(res);
-        resolve({ code: 200, data: res.zyKcList });
+        resolve({ code: 200, data: { zyKcList: res.zyKcList, zy: res.zy } });
       })
     }).catch((err) => {
       console.log(err)

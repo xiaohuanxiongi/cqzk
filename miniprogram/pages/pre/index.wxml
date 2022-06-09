@@ -1,21 +1,40 @@
-<!--<view class="head" style="height: {{ barHeight }}px">-->
-<!--  <view class="head__title" style="height: {{ navHead }}px;padding-top: {{ statusBarHeight }}px">-->
-<!--    <text>重庆自考小助手</text>-->
-<!--  </view>-->
-<!--</view>-->
-<!--style="padding-top: {{ barHeight }}px"-->
-<scroll-view class="container" scroll-y >
-  <view class="warp">
-    <block wx:if="{{ auth }}">
-      <block wx:for="{{ list }}" wx:key="index">
-        <view class="cell {{ item.zt === '0' ? 'fail' : 'success' }}">
-          <text>{{ item.kcmc }}</text>
-          <text>{{ item.cjly }}</text>
+<block wx:if="{{ loading }}">
+  <cq-loading />
+</block>
+<block wx:else>
+  <scroll-view class="container" scroll-y >
+    <view class="warp">
+      <block wx:if="{{ auth }}">
+        <view class="info">
+          <view class="info-item">
+            <text class="label">专业代码-名称</text>
+            <text class="input">{{ info.zydm }} - {{ info.zymc }}</text>
+          </view>
+          <view class="info-item">
+            <text class="label">学历层次</text>
+            <text class="input">{{ info.zyccmc }}</text>
+          </view>
+          <view class="info-item">
+            <text class="label">类别名称</text>
+            <text class="input">{{ info.zylbmc }}</text>
+          </view>
+        </view>
+        <view class="list">
+          <view class="list-title">
+            专业课程
+            <text class="sub">绿色表示已通过</text>
+          </view>
+          <block wx:for="{{ list }}" wx:key="index">
+            <view class="list-cell">
+              <text>{{ item.kcmc }}</text>
+              <text class="{{ item.zt === '0' ? 'fail' : 'success' }}">{{ item.cjly }}</text>
+            </view>
+          </block>
         </view>
       </block>
-    </block>
-    <block wx:else>
-      <text>你没还有授权..</text>
-    </block>
-  </view>
-</scroll-view>
+      <block wx:else>
+        <text class="tip">尚未授权,不能使用此功能</text>
+      </block>
+    </view>
+  </scroll-view>
+</block>

@@ -10,26 +10,9 @@
   "window": {
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "重庆自考小助手",
-    "navigationBarTextStyle": "black"
-  },
-  "tabBar": {
-    "custom": true,
-    "list": [
-      {
-        "pagePath": "pages/index/index",
-        "text": "首页"
-      },
-      {
-        "pagePath": "pages/pre/index",
-        "text": "毕业预判"
-      },
-      {
-        "pagePath": "pages/my/index",
-        "text": "个人中心"
-      }
-    ]
+    "navigationBarBackgroundColor": "#48af8a",
+    "navigationBarTitleText": "雾都小助手",
+    "navigationBarTextStyle": "white"
   },
   "useExtendedLib": {},
   "sitemapLocation": "sitemap.json",

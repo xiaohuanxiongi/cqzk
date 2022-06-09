@@ -1,3 +1,7 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "cq-loading": "../../components/loading"
+  },
+  "navigationBarTitleText": "成绩查询",
+  "disableScroll": true
 }

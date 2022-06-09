@@ -1,5 +1,6 @@
 const axios = require('./axios');
 const {
+  homeInfo,
   zkUrl,
   base64Img,
   zkLoginUrl,
@@ -52,12 +53,19 @@ function byKcService(data, cookie) {
   return axios.post(byKc, qs.stringify(data), { params: { _ }, headers: { Cookie: cookie } })
 }
 
+//  获取首页通知
+function getNews() {
+  return axios.get(homeInfo, { params: { _ } });
+}
+
 module.exports = {
   zkCodeService,
   base64ImgService,
   zkLoginService,
   zkTokenCheckService,
+  zkTitleService,
   zkScoreService,
   ksInfoService,
-  byKcService
+  byKcService,
+  getNews
 }
