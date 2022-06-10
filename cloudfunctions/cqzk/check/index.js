@@ -43,10 +43,10 @@ async function check({ zjhm, mm, openId }) {
         resolve({ code: 400, msg: isLogin });
       }
     } catch (err) {
-      if(err === "验证码错误") {
+      if(err.data === "验证码错误") {
         return check({ zjhm, mm, openId });
       } else {
-        resolve({ code: 400, msg: err });
+        resolve({ code: 400, msg: err.data });
       }
     }
   })

@@ -53,11 +53,10 @@ async function auth({ zjhm, mm, openId }) {
         })
       }
     } catch (err) {
-      console.log(err)
-      if(err === "验证码错误") {
+      if(err.data === "验证码错误") {
         return auth({ zjhm, mm, openId });
       } else {
-        reject(err)
+        reject(err.data)
       }
     }
   })

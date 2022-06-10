@@ -43,7 +43,7 @@ Page({
           wx.showToast({ title: res.msg, icon: 'none' });
           postNotificationName('isAuth', true);
         }).catch(err => {
-          wx.showToast({ title: `请求超时` });
+          wx.showToast({ title: err });
         })
       } catch (err) {
         wx.showToast({ title: `出错` });

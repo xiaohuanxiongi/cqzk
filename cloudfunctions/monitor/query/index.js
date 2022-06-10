@@ -40,6 +40,28 @@ function btoa(string) {
   return rest ? result.slice(0, rest - 3) + "===".substring(rest) : result;
 };
 
+//  token验证
+function tokenCheck(user) {
+  const { token } = user;
+  return new Promise(async (resolve, reject) => {
+    try {
+      await zkTokenCheckService(token);
+      resolve()
+    } catch (err) {
+      if(err.status === 203) {
+        check(user).then((token) => {
+          user.token = token;
+          resolve()
+        }).catch(err => {
+          reject(err);
+        })
+      } else {
+        reject('用户信息获取失败');
+      }
+    }
+  })
+}
+
 //  授权
 async function check({ zjhm, mm, openId }) {
   return new Promise(async (resolve, reject) => {
@@ -61,7 +83,7 @@ async function check({ zjhm, mm, openId }) {
         reject(isLogin);
       }
     } catch (err) {
-      if(err === "验证码错误") {
+      if(err.data === "验证码错误") {
         return check({ zjhm, mm, openId });
       } else {
         reject(err);
@@ -70,34 +92,38 @@ async function check({ zjhm, mm, openId }) {
   })
 }
 
-//  获取用户信息(验证token);
-let index = 0;
-function getInfo(user) {
-  const cookie = user.token;
+//  成绩查询
+function queryScore(code, _, token, openId) {
   return new Promise((resolve, reject) => {
-    zkTokenCheckService(cookie).then((info) => {
-      let _ = Math.random();
-      const { code, token, openId } = user;
-      zkScoreService({ id: code, _ }, token).then(res => {
-        editOne('user', openId, { isQuery: false });
-        send(res, openId);
-        allQuery();
-        //  去把剩余的用户都执行一次
-        resolve(`成绩已发送`);
-      }).catch((err) => {
-        reject(err.data);
-      });
+    zkScoreService({ id: code, _ }, token).then(async res => {
+      await editOne('user', openId, { isQuery: false });
+      send(res, openId);
+      // allQuery();
+      //  去把剩余的用户都执行一次
+      resolve(`成绩已发送`);
     }).catch((err) => {
-      if(err.status === 203 && index <= 2) {
-        check(user).then((token) => {
-          user.token = token;
-          return getInfo(user);
-        }).catch(err => {
-          reject(err);
-        })
-      } else {
-        reject('用户信息获取失败');
-      }
+      reject(err.data);
+    });
+  })
+}
+
+//  查询一个用户信息
+function getInfo(user) {
+  return new Promise((resolve, reject) => {
+    tokenCheck(user).then(() => {
+      const _ = Math.random();
+      const { code, token, openId } = user;
+      //  单独的请求,查询成绩,成功则发送通知,失败则不发送
+      queryScore(code, _, token, openId).then((res) => {
+        resolve(res);
+        //  成功后再去把别的用户的成绩获取到,进行发送
+        allQuery();
+      }).catch(err => {
+        reject(err);
+      });
+    }).catch(err => {
+      console.log(err);
+      reject('用户信息获取失败');
     })
   })
 }
@@ -106,12 +132,20 @@ function getInfo(user) {
 async function allQuery() {
   const list = await read('user', { isQuery: true });
   if (list.data.length) {
-    const user = list.data[0];
-    getInfo(user).then(res => {
-      console.log(res);
-    }).catch(err => {
-      console.log(err);
-    });
+    list.data.forEach((user) => {
+      tokenCheck(user).then(() => {
+        const _ = Math.random();
+        const { code, token, openId } = user;
+        //  单独的请求,查询成绩,成功则发送通知,失败则不发送
+        queryScore(code, _, token, openId).then((res) => {
+          console.log(res)
+        }).catch(err => {
+          console.error(err);
+        });
+      }).catch(err => {
+        console.log(err);
+      })
+    })
   }
 }
 
@@ -119,32 +153,24 @@ async function allQuery() {
 exports.main = async (event, context) => {
   return new Promise(async (resolve) => {
     try {
-      //  判断当前时间是否为公布成绩时间,不是则不查询;
-      const date = await read('date');
-      //  公布成绩年月日
-      const targetDate = dayjs(date.data[0].date).format('YYYYMMDD');
-      //  当前年月日
-      const curDate = dayjs(new Date()).format('YYYYMMDD');
-      if (curDate >= targetDate) {
-        //  开启定时器,每分钟执行一次,当时间为早上九点到晚上十一点时才去查询,否则不去查询;
-        const hour = dayjs(new Date()).format('HH');
-        //  由于云函数的实际是国际时间,需要+8小时才为北京时间;
-        if (hour >= '01' && hour <= '15') {
-          const list = await read('user', { isQuery: true });
-          if (list.data.length) {
-            const one = list.data[0];
-            getInfo(one).then(res => {
-              console.log(res);
-              resolve({ code: 200, msg: '成功' });
-            }).catch(err => {
-              resolve({ code: 100, msg: err });
-              console.log(err);
-            });
-          }
+      //  开启定时器,每分钟执行一次,当时间为早上九点到晚上十一点时才去查询,否则不去查询;
+      const hour = dayjs(new Date()).format('HH');
+      //  由于云函数的实际是国际时间,需要+8小时才为北京时间;
+      if (hour >= '01' && hour <= '15') {
+        const list = await read('user', { isQuery: true });
+        if (list.data.length) {
+          const one = list.data[0];
+          getInfo(one).then(() => {
+            resolve({ code: 200, msg: `成绩已推送` });
+          }).catch(err => {
+            resolve({ code: 100, msg: err });
+          });
+        } else {
+          resolve({ code: 100, msg: `无用户需要查询` });
         }
       }
     } catch (err) {
-      console.log(`出现了错误`, err);
+      console.error(`出现了错误`, err);
       resolve({
         code: 202,
         err
